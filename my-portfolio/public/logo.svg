@@ -1,0 +1,26 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Base seal -->
+  <rect x="4" y="4" width="120" height="120" rx="6"
+        fill="#EFEEE8" stroke="#C9C5B9" stroke-width="2"/>
+
+  <!-- Folded document corner -->
+  <path d="M 96 4 L 124 4 L 124 32 Z" fill="#2B4570"/>
+  <path d="M 96 4 L 124 32" stroke="#1D3050" stroke-width="1"/>
+
+  <!-- Registration mark, bottom-left, quiet nod to the "documentation" theme -->
+  <g stroke="#C9C5B9" stroke-width="1.5">
+    <line x1="16" y1="106" x2="16" y2="114"/>
+    <line x1="12" y1="110" x2="20" y2="110"/>
+  </g>
+
+  <!-- Monogram -->
+  <text x="58" y="80"
+        font-family="Lora, Georgia, serif"
+        font-weight="700"
+        font-size="52"
+        fill="#201D1A"
+        text-anchor="middle">JC</text>
+
+  <!-- Underline accent -->
+  <rect x="38" y="90" width="40" height="3" fill="#2B4570"/>
+</svg>
