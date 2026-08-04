@@ -9,6 +9,7 @@ export interface Project {
   points: string[];
   tags: string[];
   liveUrl?: string;
+  demoNote?: string;
 }
 
 export const projects: Project[] = [
@@ -34,6 +35,7 @@ export const projects: Project[] = [
     ],
     tags: ["React", "Django REST Framework", "AWS S3", "Tailwind CSS", "JWT"],
     liveUrl: "https://psu-jl.vercel.app/",
+    demoNote: "Note: The application is fully browsable. Document uploads are temporarily disabled because the AWS S3 storage service is currently inactive.",
   },
   {
     ref: "REF-03", status: "shipped", statusLabel: "Real-Time", title: "Hearthside Rooms",
@@ -59,7 +61,7 @@ export const projects: Project[] = [
   },
   {
   ref: "REF-05",
-  status: "progress",
+  status: "shipped",
   statusLabel: "Community Safety",
   title: "A.S.A.P. Lagundi",
   subtitle: "Real-time community incident reporting and response platform",
@@ -82,7 +84,7 @@ export const projects: Project[] = [
 },
 {
   ref: "REF-06",
-  status: "progress",
+  status: "shipped",
   statusLabel: "Civic Tech",
   title: "BARCEN Census Platform",
   subtitle: "Offline-first barangay census and resident management system",

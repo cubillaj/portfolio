@@ -198,6 +198,14 @@
   border-color: var(--stamp-blue);
 }
 
+.demoNote {
+  margin: 12px 0 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
 /* ---------- STACK STRIP ---------- */
 .pager {
   display: flex;

@@ -26,6 +26,9 @@ export default function ProjectDossier({ project }: { project: Project }) {
             View it live →
           </a>
         )}
+        {project.demoNote && (
+          <p className={styles.demoNote}>{project.demoNote}</p>
+        )}
       </div>
     </article>
   );
