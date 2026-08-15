@@ -12,12 +12,12 @@ const proficiency = [
   {
     level: "Experienced",
     description: "Technologies I have applied across production-focused and real-time projects.",
-    items: ["Next.js", "MongoDB", "Redis", "Socket.IO", "JWT & Session Auth", "Prisma ORM", "Drizzle ORM"],
+    items: ["Next.js", "MongoDB", "Redis", "Socket.IO", "JWT & Session Auth", "Prisma ORM", "Drizzle ORM", "Zod"],
   },
   {
     level: "Working knowledge",
     description: "Tools I can use effectively and continue to deepen through project work.",
-    items: ["Python", "Django REST Framework", "Tailwind CSS", "AWS S3", "GitHub Actions", "BullMQ"],
+    items: ["Python", "Django REST Framework", "Tailwind CSS", "AWS S3", "GitHub Actions", "BullMQ", "Docker"],
   },
 ];
 
