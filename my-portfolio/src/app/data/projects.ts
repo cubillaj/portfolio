@@ -33,7 +33,7 @@ export const projects: Project[] = [
     audience: "Small businesses and finance teams managing recurring client billing.",
     outcome: "Turns a manual billing process into one secure workflow, from invoice creation to payment reconciliation.",
     highlights: ["Automates recurring invoices and background jobs with Redis and BullMQ.", "Verifies PayMongo webhooks and reconciles successful payments securely.", "Includes PDF exports, audit logs, dashboards, rate limiting, and role-based access."],
-    tags: ["React", "TypeScript", "Express.js", "PostgreSQL", "Drizzle ORM", "Redis", "BullMQ", "PayMongo"],
+    tags: ["React", "TypeScript", "Express.js", "PostgreSQL", "Drizzle ORM", "Redis", "BullMQ", "PayMongo", "Zod", "Docker"],
     images: [
       { src: "https://res.cloudinary.com/dnzsrncen/image/upload/v1786708191/Screenshot_2026-08-14_194918_ggmvgk.png", 
         alt: "Singil Landing Page", 
@@ -67,7 +67,7 @@ export const projects: Project[] = [
     audience: "University applicants, HR administrators, and recruitment staff across seven campuses.",
     outcome: "Replaces scattered applications and manual follow-ups with a visible, trackable hiring process.",
     highlights: ["Validates and stores applicant PDFs in AWS S3 with role-based access.", "Supports OTP verification, email updates, activity logs, and secure JWT authentication.", "Gives administrators analytics, filters, Excel exports, and automatic record archival."],
-    tags: ["React", "Django REST Framework", "AWS S3", "Tailwind CSS", "JWT"],
+    tags: ["React", "Django REST Framework", "AWS S3", "Tailwind CSS", "JWT", "Zod"],
     images: [
       { src: "https://res.cloudinary.com/dnzsrncen/image/upload/v1786708588/Screenshot_2026-08-14_195340_ukbwqz.png", 
         alt: "PSU landing page", 
@@ -109,7 +109,7 @@ export const projects: Project[] = [
     audience: "Small teams and communities collaborating in private rooms.",
     outcome: "Makes remote conversations feel immediate while preserving the controls and history teams need.",
     highlights: ["Streams messages, presence, typing indicators, and read receipts with Socket.IO.", "Protects sessions with rotating refresh tokens and HTTP-only cookies.", "Includes role-based administration, paginated history, caching, and profile uploads."],
-    tags: ["React", "TypeScript", "Node.js", "Express.js", "Socket.IO", "PostgreSQL", "Redis"],
+    tags: ["React", "TypeScript", "Node.js", "Express.js", "Socket.IO", "PostgreSQL", "Redis", "Zod"],
     images: [
       { src: "https://res.cloudinary.com/dnzsrncen/image/upload/v1786708861/Screenshot_2026-08-14_200029_bovhpy.png", 
         alt: "Hearthside login page", 
@@ -130,7 +130,7 @@ export const projects: Project[] = [
     audience: "Operations personnel and administrators responsible for daily compliance reporting.",
     outcome: "Reduces fragmented reporting and gives decision-makers a more consistent view of operational activity.",
     highlights: ["Handles multiple reporting schedules with transactional validation.", "Uses Redis-backed sessions and caching for secure, responsive workflows.", "Optimizes PostgreSQL analytics queries and includes CI and real-time infrastructure."],
-    tags: ["React", "TypeScript", "Express.js", "PostgreSQL", "Prisma ORM", "Redis", "GitHub Actions"],
+    tags: ["React", "TypeScript", "Express.js", "PostgreSQL", "Prisma ORM", "Redis", "GitHub Actions", "Zod"],
     images: [
       { src: "https://res.cloudinary.com/dnzsrncen/image/upload/v1786707420/Screenshot_2026-08-14_115338_miwafd.png", 
         alt: "BJMP landing page", 
