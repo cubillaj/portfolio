@@ -67,7 +67,7 @@ export const projects: Project[] = [
     audience: "University applicants, HR administrators, and recruitment staff across seven campuses.",
     outcome: "Replaces scattered applications and manual follow-ups with a visible, trackable hiring process.",
     highlights: ["Validates and stores applicant PDFs in AWS S3 with role-based access.", "Supports OTP verification, email updates, activity logs, and secure JWT authentication.", "Gives administrators analytics, filters, Excel exports, and automatic record archival."],
-    tags: ["React", "Django REST Framework", "AWS S3", "Tailwind CSS", "JWT", "Zod"],
+    tags: ["React", "Django REST Framework", "AWS S3", "Tailwind CSS", "JWT"],
     images: [
       { src: "https://res.cloudinary.com/dnzsrncen/image/upload/v1786708588/Screenshot_2026-08-14_195340_ukbwqz.png", 
         alt: "PSU landing page", 
