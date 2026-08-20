@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" data-scroll-behavior="smooth">
-      <body>
+    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
+      <body className="min-h-screen bg-[var(--paper)] text-[var(--ink)] antialiased transition-colors duration-200">
         <SectionNav />
         {children}
         <footer className={styles.globalFooter}>

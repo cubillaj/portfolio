@@ -99,8 +99,7 @@ export const projects: Project[] = [
       },
     ],
     liveUrl: "https://psu-jl.vercel.app/",
-    sourceLabel: "Private repository",
-    demoNote: "The application is browsable, but document uploads are temporarily unavailable while its AWS S3 storage is inactive.",
+    sourceLabel: "Private repository"
   },
   {
     ref: "REF-03", slug: "hearthside-rooms", status: "shipped", statusLabel: "Real-Time", title: "Hearthside Rooms",
