@@ -6,12 +6,18 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:chat": "tsx --test tests/chat-security.test.ts",
+    "format:chat": "prettier --write src/app/components/PortfolioChat.tsx src/app/components/PortfolioChat.module.css src/app/api/v1/chat/route.ts src/lib/openrouter.ts src/lib/chat-limits.ts src/server tests/chat-security.test.ts docs/chat-setup.md package.json .prettierrc.json",
+    "format:check": "prettier --check src/app/components/PortfolioChat.tsx src/app/components/PortfolioChat.module.css src/app/api/v1/chat/route.ts src/lib/openrouter.ts src/lib/chat-limits.ts src/server tests/chat-security.test.ts docs/chat-setup.md package.json .prettierrc.json"
   },
   "dependencies": {
-    "next": "16.2.10",
+    "@openrouter/sdk": "^1.2.107",
+    "next": "^16.3.4",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "react-markdown": "^10.1.0",
+    "zod": "^4.5.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -19,8 +25,10 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.2.10",
+    "eslint-config-next": "^16.3.4",
+    "prettier": "^3.9.6",
     "tailwindcss": "^4",
+    "tsx": "^4.23.13",
     "typescript": "^5"
   }
 }
