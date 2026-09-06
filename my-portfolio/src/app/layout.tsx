@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
 import SectionNav from "./components/SectionNav";
+import PortfolioChat from "./components/PortfolioChat";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -16,6 +17,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className="min-h-screen bg-[var(--paper)] text-[var(--ink)] antialiased transition-colors duration-200">
         <SectionNav />
         {children}
+        <PortfolioChat />
         <footer className={styles.globalFooter}>
           <div className={styles.footerInner}>
             <div className={styles.footerTop}>
