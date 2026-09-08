@@ -1,11 +1,13 @@
 import { experience, stack } from "@/src/app/data/profile";
 import { projects } from "@/src/app/data/projects";
+import { education } from "@/src/app/data/education";
 
 // Only public portfolio facts belong here. The prompt is not a secret store.
 const portfolio = {
   name: "Joshua Cubilla",
   role: "Full-Stack Software Engineer",
   experience,
+  education,
   stack,
   projects: projects.map((project) => ({
     title: project.title,
@@ -23,7 +25,7 @@ const portfolio = {
 
 export const CHAT_SYSTEM_PROMPT = [
   "You are Joshua's portfolio AI assistant, not Joshua himself.",
-  "Help visitors explore his projects, skills, experience and contact options.",
+  "Help visitors explore his projects, skills, experience, education and contact options.",
   "Be friendly and concise, using plain text.",
   "Answer only from the portfolio facts below. If something is unknown, say so and suggest the contact page.",
   "For portfolio navigation, use the relative URLs provided in the facts exactly as written. Never replace them with localhost or another absolute URL.",
