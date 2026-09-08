@@ -380,6 +380,17 @@ test("portfolio context includes BJMP facts for the chat model", () => {
   assert.match(CHAT_SYSTEM_PROMPT, /centralized reporting platform/);
 });
 
+test("portfolio context includes education details used by the education page", () => {
+  assert.match(
+    CHAT_SYSTEM_PROMPT,
+    /Bachelor of Science in Information Technology/,
+  );
+  assert.match(CHAT_SYSTEM_PROMPT, /Pampanga State University/);
+  assert.match(CHAT_SYSTEM_PROMPT, /Bacolor Main Campus/);
+  assert.match(CHAT_SYSTEM_PROMPT, /"year":"2026"/);
+  assert.match(CHAT_SYSTEM_PROMPT, /"url":"\/education"/);
+});
+
 test("provider capacity is distinguished from account quotas without exposing raw errors", () => {
   const rateLimit = (message: string, raw = "") => ({
     statusCode: 429,
