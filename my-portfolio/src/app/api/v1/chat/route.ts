@@ -4,6 +4,7 @@ import { sendChat } from "@/src/server/modules/chat/chat.service";
 import { reserveChatQuota } from "@/src/server/security/chat-rate-limit";
 import { getChatModel } from "@/src/server/security/chat-model";
 import { getRateLimitMessage } from "@/src/server/modules/chat/chat.error";
+import { getChatDiagnostic } from "@/src/server/modules/chat/chat.diagnostics";
 
 export const runtime = "nodejs";
 const handleChat = withValidation(chatSchema, async (data, request) => {
@@ -32,6 +33,10 @@ const handleChat = withValidation(chatSchema, async (data, request) => {
       },
     });
   } catch (error) {
+    console.error(
+      "[portfolio-chat] Upstream request failed",
+      getChatDiagnostic(error),
+    );
     const rateLimitMessage = getRateLimitMessage(error);
     if (rateLimitMessage) {
       return Response.json(

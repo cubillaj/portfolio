@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { loadEnvConfig } from "@next/env";
 import { sendChat } from "../src/server/modules/chat/chat.service";
 import type { ChatEvent } from "../src/server/modules/chat/chat.types";
+import { getChatDiagnostic } from "../src/server/modules/chat/chat.diagnostics";
 
 // Opt-in smoke test: sends one request using the locally configured free key.
 async function main() {
@@ -37,6 +38,7 @@ async function main() {
 }
 
 void main().catch((error: unknown) => {
+  console.error(getChatDiagnostic(error));
   if (error && typeof error === "object") {
     if ("error" in error && error.error && typeof error.error === "object") {
       const detail = error.error as {
@@ -54,6 +56,13 @@ void main().catch((error: unknown) => {
             : "unspecified";
       console.error({
         reason,
+        providerMessage: detail.message
+          ?.replaceAll(
+            process.env.OPENROUTER_API_KEY || "__no_key__",
+            "[redacted]",
+          )
+          .replace(/sk-[A-Za-z0-9_-]+/g, "[redacted]")
+          .slice(0, 240),
         retryAfter: detail.metadata?.headers?.["Retry-After"],
         reset: detail.metadata?.headers?.["X-RateLimit-Reset"],
       });

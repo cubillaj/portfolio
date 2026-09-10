@@ -30,3 +30,22 @@ export function getRateLimitMessage(error: unknown): string | null {
   }
   return "The free AI service is rate-limiting requests. Please try later or use the contact page.";
 }
+
+export function canTryNextModelBatch(error: unknown): boolean {
+  if (!error || typeof error !== "object" || !("statusCode" in error))
+    return false;
+  const status = error.statusCode;
+  if (status === 429) {
+    const parsed = rateLimitError.safeParse(error);
+    if (!parsed.success) return false;
+    const detail = parsed.data.error;
+    const message =
+      `${detail?.message ?? ""} ${detail?.metadata?.raw ?? ""}`.toLowerCase();
+    if (/free-models-per-|daily|per.minute|per.day/.test(message)) return false;
+    return /upstream|provider returned|temporarily rate-limited/.test(message);
+  }
+  return (
+    status === 404 ||
+    (typeof status === "number" && status >= 500 && status <= 599)
+  );
+}

@@ -2,60 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import ReactMarkdown from "react-markdown";
+import ChatMarkdown from "./ChatMarkdown";
 import type {
   ChatEvent,
   ChatMessage,
 } from "@/src/server/modules/chat/chat.types";
 import styles from "./PortfolioChat.module.css";
 import { CHAT_LIMITS } from "@/src/lib/chat-limits";
-
-function internalHref(href?: string) {
-  if (!href) return undefined;
-  if (href.startsWith("/")) return href;
-  try {
-    const url = new URL(href);
-    if (url.origin === "http://localhost:3000")
-      return `${url.pathname}${url.search}${url.hash}`;
-  } catch {
-    return undefined;
-  }
-  return undefined;
-}
-
-const markdownComponents = {
-  a: ({
-    href,
-    children,
-  }: {
-    href?: string;
-    children?: React.ReactNode;
-    }) => {
-    const localHref = internalHref(href);
-    return localHref ? (
-      <Link href={localHref}>{children}</Link>
-    ) : (
-      <a href={href} target="_blank" rel="noreferrer">
-        {children}
-      </a>
-    );
-  },
-};
-
-// Safety net: if the model mentions one of these paths as plain text
-// instead of proper Markdown link syntax, turn it into a link anyway.
-// Add any other routes worth linking here.
-const LINKABLE_PATHS = ["/contact", "/projects", "/about", "/resume"];
-const barePathPattern = new RegExp(
-  `(?<!\\]\\()(${LINKABLE_PATHS.map((path) =>
-    path.replace(/\//g, "\\/"),
-  ).join("|")})\\b(?!\\))`,
-  "g",
-);
-
-function autolinkKnownPaths(text: string) {
-  return text.replace(barePathPattern, (match) => `[${match}](${match})`);
-}
 
 const prompts = [
   "Which project should I explore?",
@@ -204,7 +157,9 @@ export default function PortfolioChat() {
                 <h2 id="chat-title" className={styles.title}>
                   Ask about Joshua
                 </h2>
-                <p className={styles.subtitle}>Usually replies in a few seconds</p>
+                <p className={styles.subtitle}>
+                  Usually replies in a few seconds
+                </p>
               </div>
             </div>
             <button
@@ -245,8 +200,8 @@ export default function PortfolioChat() {
               <div className={styles.welcome}>
                 <h3>Get quick answers about Joshua&rsquo;s work</h3>
                 <p>
-                  Ask about his projects, tech stack, or experience, and I&rsquo;ll
-                  pull from his portfolio to help you explore.
+                  Ask about his projects, tech stack, or experience, and
+                  I&rsquo;ll pull from his portfolio to help you explore.
                 </p>
                 <div className={styles.prompts}>
                   {prompts.map((prompt) => (
@@ -265,9 +220,7 @@ export default function PortfolioChat() {
                 }`}
               >
                 <div className={styles.bubble}>
-                  <ReactMarkdown components={markdownComponents}>
-                    {autolinkKnownPaths(message.content) || "Thinking…"}
-                  </ReactMarkdown>
+                  <ChatMarkdown>{message.content || "Thinking…"}</ChatMarkdown>
                 </div>
               </div>
             ))}

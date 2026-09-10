@@ -4,13 +4,14 @@ const CHAT_MODEL_ORDER: readonly string[] = [
   DEFAULT_CHAT_MODEL,
   "google/gemma-4-31b-it:free",
   "minimax/minimax-m3:free",
+  "openrouter/free",
 ];
 
 export function getChatModel(): string {
   const model = process.env.OPENROUTER_MODEL?.trim() || DEFAULT_CHAT_MODEL;
 
-  // Random free routing can select a moderation classifier. Allow only
-  // explicit conversational models, with no paid or random fallback.
+  // Keep paid models blocked. The explicitly requested random free router is
+  // the final fallback and may select specialized models such as classifiers.
   if (!CHAT_MODEL_ORDER.includes(model)) {
     throw new Error(
       "The portfolio chatbot only supports free chat models in its allowlist.",

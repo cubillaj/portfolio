@@ -12,10 +12,9 @@ for these secrets or commit an environment file.
    [OpenRouter settings](https://openrouter.ai/settings/keys). No positive balance
    or spending cap is required by this application. Do not use a management key.
    Set `OPENROUTER_MODEL=google/gemma-4-26b-a4b-it:free`. Requests use this order:
-   Gemma 4 26B A4B → Gemma 4 31B → MiniMax M3. All three IDs end in `:free`.
-   The server allows these explicit chat models only; there is no paid or random
-   fallback. Replace older `openrouter/free`
-   settings in local and hosting environments, then restart or redeploy.
+   Gemma 4 26B A4B → Gemma 4 31B → MiniMax M3
+   → `openrouter/free`. Paid model IDs remain blocked. Keep Gemma 26B as the
+   starting model in local and hosting environments to use the full chain.
 2. Create a dedicated Upstash Redis database and add its
    `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` to your host's server
    environment settings. Use the writable REST token; the limiter runs an atomic
@@ -31,17 +30,26 @@ No accounts, databases, or spending settings were provisioned automatically.
 
 `openrouter/free` selects from the free model pool, which includes specialized
 safety classifiers. Those may return labels such as "User Safety: safe" instead
-of answering a question. The random router and moderation models are excluded
-from the chat-model allowlist. Before changing that list in `chat-model.ts`,
+of answering a question. The random router is explicitly allowed as the last
+fallback at the owner's request; individual moderation models remain blocked.
+Before changing that list in `chat-model.ts`,
 verify the model's availability and conversational capabilities in the catalog.
 
-The service sends OpenRouter one ordered `models` array:
+The service keeps this priority order:
 
 1. `google/gemma-4-26b-a4b-it:free`
 2. `google/gemma-4-31b-it:free`
 3. `minimax/minimax-m3:free`
+4. `openrouter/free`
 
-OpenRouter handles failures before a response begins. Once text starts streaming,
+OpenRouter accepts at most three models per request. The first request contains
+Gemma 26B, Gemma 31B, and MiniMax M3. If that batch fails with provider throttling,
+missing endpoints, or a server error, the app sends a second request containing
+only `openrouter/free`. Authentication, payment, request validation, unknown rate
+limits, and account-wide quota failures stop immediately. There are at most two
+requests, sharing a single 45-second deadline; cancellation stops further attempts.
+
+OpenRouter handles failures within each batch before a response begins. Once text starts streaming,
 the app never switches models or splices another answer into the reply. A stream
 failure shows an interruption message. There is one 45-second timeout for the
 whole request and no additional SDK retries. The same portfolio facts and
@@ -49,7 +57,7 @@ conversation are sent regardless of which model responds. The completion event
 reports the actual response model for the optional live smoke test.
 
 If `OPENROUTER_MODEL` explicitly names a later model in the list, routing starts
-there and keeps the remaining order. Leave it set to Gemma 26B for all three.
+there and keeps the remaining order. Leave it set to Gemma 26B for all four.
 Fallbacks do not bypass account-wide free quotas. One app request reserves one
 site quota slot; OpenRouter controls how provider attempts count toward its quota.
 
@@ -104,7 +112,10 @@ reformatting unrelated portfolio pages. To format another file, run
 `npx prettier --write path/to/file`.
 
 For an optional live check, run `npx tsx tests/chat-live.ts`. This loads local
-environment settings and spends one free-model request to ask about BJMP.
+environment settings and runs one chat (up to two fallback requests) to ask about BJMP.
 A provider `429` means its quota or capacity limit was reached; it does not
 mean a payment card is required. Wait before retrying rather than consuming
 more requests with repeated tests.
+
+Server request failures log `[portfolio-chat]` with an error category and upstream
+status. They never log raw errors, request headers, API keys, or visitor messages.

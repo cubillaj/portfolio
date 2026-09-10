@@ -13,6 +13,11 @@ import { CHAT_SYSTEM_PROMPT } from "../src/server/modules/chat/chat.context";
 import { getRateLimitMessage } from "../src/server/modules/chat/chat.error";
 import { sendChat } from "../src/server/modules/chat/chat.service";
 import { POST } from "../src/app/api/v1/chat/route";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import ChatMarkdown from "../src/app/components/ChatMarkdown";
+import { projects } from "../src/app/data/projects";
+import { getChatDiagnostic } from "../src/server/modules/chat/chat.diagnostics";
 
 function environment(
   t: TestContext,
@@ -215,15 +220,24 @@ test("free-only model selection needs no balance or budget lookup", (t) => {
     "google/gemma-4-26b-a4b-it:free",
     "google/gemma-4-31b-it:free",
     "minimax/minimax-m3:free",
+    "openrouter/free",
   ]);
   process.env.OPENROUTER_MODEL = "google/gemma-4-31b-it:free";
   assert.equal(getChatModel(), "google/gemma-4-31b-it:free");
   assert.deepEqual(getChatModels(), [
     "google/gemma-4-31b-it:free",
     "minimax/minimax-m3:free",
+    "openrouter/free",
   ]);
   process.env.OPENROUTER_MODEL = "minimax/minimax-m3:free";
-  assert.deepEqual(getChatModels(), ["minimax/minimax-m3:free"]);
+  assert.deepEqual(getChatModels(), [
+    "minimax/minimax-m3:free",
+    "openrouter/free",
+  ]);
+  process.env.OPENROUTER_MODEL = "google/gemini-2.0-flash:free";
+  assert.throws(getChatModels, /only supports free/);
+  process.env.OPENROUTER_MODEL = "openrouter/free";
+  assert.deepEqual(getChatModels(), ["openrouter/free"]);
   assert.equal(fetchMock.mock.callCount(), 0);
 });
 
@@ -307,6 +321,103 @@ test("account quota errors are returned without extra SDK attempts", async (t) =
   assert.equal(fetchMock.mock.callCount(), 1);
 });
 
+test("free router is tried separately after the first three providers fail", async (t) => {
+  environment(t, { ...production, OPENROUTER_MODEL: undefined });
+  const attempts: string[][] = [];
+  const fetchMock = t.mock.method(
+    globalThis,
+    "fetch",
+    async (input: Request) => {
+      const body = await input.json();
+      attempts.push(body.models);
+      assert.ok(body.models.length <= 3);
+      if (attempts.length === 1) {
+        return Response.json(
+          {
+            error: {
+              code: 429,
+              message: "Provider returned error",
+              metadata: { raw: "temporarily rate-limited upstream" },
+            },
+          },
+          { status: 429 },
+        );
+      }
+      const chunk = {
+        ...completionChunk("BJMP reporting platform"),
+        model: "selected-free-chat-model",
+      };
+      return new Response(
+        `data: ${JSON.stringify(chunk)}\n\ndata: [DONE]\n\n`,
+        { headers: { "Content-Type": "text/event-stream" } },
+      );
+    },
+  );
+  const stream = await sendChat(
+    { messages: [{ role: "user", content: "BJMP?" }] },
+    new AbortController().signal,
+  );
+  const body = await new Response(stream).text();
+  assert.match(body, /BJMP reporting platform/);
+  assert.deepEqual(attempts, [
+    [
+      "google/gemma-4-26b-a4b-it:free",
+      "google/gemma-4-31b-it:free",
+      "minimax/minimax-m3:free",
+    ],
+    ["openrouter/free"],
+  ]);
+  assert.equal(fetchMock.mock.callCount(), 2);
+});
+
+test("exhausted provider batches stop after two requests", async (t) => {
+  environment(t, { ...production, OPENROUTER_MODEL: undefined });
+  const fetchMock = t.mock.method(globalThis, "fetch", async () =>
+    Response.json(
+      { error: { code: 503, message: "Provider unavailable" } },
+      { status: 503 },
+    ),
+  );
+  await assert.rejects(
+    sendChat(
+      { messages: [{ role: "user", content: "Hello" }] },
+      new AbortController().signal,
+    ),
+  );
+  assert.equal(fetchMock.mock.callCount(), 2);
+});
+
+test("invalid credentials do not trigger a second model batch", async (t) => {
+  environment(t, { ...production, OPENROUTER_MODEL: undefined });
+  const fetchMock = t.mock.method(globalThis, "fetch", async () =>
+    Response.json(
+      { error: { code: 401, message: "Invalid credentials" } },
+      { status: 401 },
+    ),
+  );
+  await assert.rejects(
+    sendChat(
+      { messages: [{ role: "user", content: "Hello" }] },
+      new AbortController().signal,
+    ),
+  );
+  assert.equal(fetchMock.mock.callCount(), 1);
+});
+
+test("diagnostics identify rejected fallback lists without logging sensitive data", () => {
+  const diagnostic = getChatDiagnostic({
+    statusCode: 400,
+    error: { message: "'models' array must have 3 items or fewer." },
+    body: "private data",
+    headers: { authorization: "secret" },
+  });
+  assert.deepEqual(diagnostic, {
+    category: "fallback-list-limit",
+    upstreamStatus: 400,
+  });
+  assert.doesNotMatch(JSON.stringify(diagnostic), /private data|secret/);
+});
+
 test("a partial reply is not retried or mixed with another model", async (t) => {
   environment(t, { ...production, OPENROUTER_MODEL: undefined });
   const chunks = [
@@ -359,7 +470,6 @@ test("paid models are rejected by the service before an inference call", async (
   );
   assert.equal(fetchMock.mock.callCount(), 0);
   for (const model of [
-    "openrouter/free",
     "nvidia/nemotron-3.5-content-safety:free",
     "meta-llama/llama-guard-4-12b:free",
     "openrouter/auto",
@@ -378,6 +488,51 @@ test("portfolio context includes BJMP facts for the chat model", () => {
     /BJMP Operations Reporting System - Region III/,
   );
   assert.match(CHAT_SYSTEM_PROMPT, /centralized reporting platform/);
+});
+
+test("project Markdown and bare paths render a Project link with the full police selector", () => {
+  const path = "/projects?project=police-incident-reporting";
+  for (const content of [
+    `You can view it at [${path}](${path}).`,
+    `View [Police project](${path}).`,
+    `View ${path}.`,
+    `View [Project](http://localhost:3000${path}).`,
+  ]) {
+    const html = renderToStaticMarkup(
+      createElement(ChatMarkdown, null, content),
+    );
+    assert.match(
+      html,
+      /href="\/projects\?project=police-incident-reporting"[^>]*>Project<\/a>/,
+    );
+    assert.equal((html.match(/<a\b/g) ?? []).length, 1);
+    assert.doesNotMatch(html, /\[|\]\(/);
+    const href = html.match(/href="([^"]+)"/)![1];
+    const slug = new URL(href, "https://portfolio.example").searchParams.get(
+      "project",
+    );
+    assert.equal(
+      projects.find((project) => project.slug === slug)?.title,
+      "Police Incident Reporting and Documentation",
+    );
+  }
+});
+
+test("chat links preserve query strings and fragments without rewriting code or external destinations", () => {
+  const html = renderToStaticMarkup(
+    createElement(
+      ChatMarkdown,
+      null,
+      "Visit /projects?project=police-incident-reporting#project-showcase. Code: `/projects?project=singil`. [Demo](https://example.com/projects?project=police).",
+    ),
+  );
+  assert.match(
+    html,
+    /href="\/projects\?project=police-incident-reporting#project-showcase"/,
+  );
+  assert.match(html, /<code>\/projects\?project=singil<\/code>/);
+  assert.match(html, /href="https:\/\/example.com\/projects\?project=police"/);
+  assert.equal((html.match(/<a\b/g) ?? []).length, 2);
 });
 
 test("portfolio context includes education details used by the education page", () => {

@@ -73,7 +73,7 @@ export const projects: Project[] = [
         alt: "PSU landing page", 
         // caption: "Landing page overview" 
       },
-      { src: "https://res.cloudinary.com/dnzsrncen/image/upload/v1786708584/Screenshot_2026-08-14_195406_xoktya.png", 
+      { src: "https://res.cloudinary.com/dnzsrncen/image/upload/v1789001159/Screenshot_2026-09-10_084542_uyqkwu.png", 
         alt: "PSU landing page", 
         // caption: "Landing page overview" 
       },
@@ -85,7 +85,7 @@ export const projects: Project[] = [
         alt: "PSU landing page", 
         // caption: "Landing page overview" 
       },
-      { src: "https://res.cloudinary.com/dnzsrncen/image/upload/v1786708585/Screenshot_2026-08-14_195555_fb0kwg.png", 
+      { src: "https://res.cloudinary.com/dnzsrncen/image/upload/v1789001271/Screenshot_2026-09-10_084743_pja0nm.png", 
         alt: "PSU opporunities page", 
         // caption: "Landing page overviSingil
       },
@@ -151,7 +151,46 @@ export const projects: Project[] = [
     sourceLabel: "Private organization repository",
   },
   {
-    ref: "REF-05", slug: "asap-lagundi", status: "shipped", statusLabel: "Community Safety", title: "A.S.A.P. Lagundi",
+    ref: "REF-05",
+    slug: "police-incident-reporting",
+    status: "progress",
+    statusLabel: "Project",
+    title: "Police Incident Reporting and Documentation",
+    subtitle: "A police records workspace for incident intake, investigator coordination, and report preparation.",
+    summary: "A web application where desk officers can record police blotter entries, assign investigators, and track assignment responses. Investigators can update structured incident records, while backend APIs generate spot and progress report drafts from case information.",
+    audience: "Police desk officers, investigators, and station administrators.",
+    outcome: "Keeps incident details and investigator assignments connected, with reusable case information for report preparation.",
+    highlights: [
+      "Socket.IO delivers assignment alerts and notifications, with frontend state refreshed after reconnection to catch missed updates.",
+      "Prisma transactions coordinate investigator reassignment, audit entries, and notifications so related database changes succeed together.",
+      "OpenRouter generates spot and progress report drafts from structured case data, with Zod output validation and a required spot report reference for progress reports."
+    ],
+    tags: [
+      "React",
+      "TypeScript",
+      "Vite",
+      "Tailwind CSS",
+      "Zustand",
+      "Node.js",
+      "Express",
+      "PostgreSQL",
+      "Prisma",
+      "Socket.IO",
+      "Zod",
+      "OpenRouter"
+    ],
+    images: [
+      { src: "https://res.cloudinary.com/dnzsrncen/image/upload/v1789001816/Screenshot_2026-09-10_085634_yxwczz.png",
+        alt: "Landing page"
+      },
+      {
+        src: "https://res.cloudinary.com/dnzsrncen/image/upload/v1789001914/Screenshot_2026-09-10_085645_moadko.png",
+        alt: "Login page"
+      }
+    ]
+  },
+  {
+    ref: "REF-06", slug: "asap-lagundi", status: "shipped", statusLabel: "Community Safety", title: "A.S.A.P. Lagundi",
     subtitle: "A faster path from community incident report to local response.",
     summary: "A public safety platform where residents can report incidents and administrators can assign responders, track progress, and receive live updates as situations change.",
     audience: "Residents, local administrators, and shift-based emergency responders.",
@@ -172,7 +211,7 @@ export const projects: Project[] = [
     sourceLabel: "Private team repository",
   },
   {
-    ref: "REF-06", slug: "barcen-census", status: "shipped", statusLabel: "Civic Tech", title: "BARCEN Census Platform",
+    ref: "REF-07", slug: "barcen-census", status: "shipped", statusLabel: "Civic Tech", title: "BARCEN Census Platform",
     subtitle: "Resident records that continue working when connectivity does not.",
     summary: "An offline-first census and resident management system designed for barangay staff who need dependable data collection, search, and administration in the field.",
     audience: "Barangay administrators and census personnel working with resident records.",
