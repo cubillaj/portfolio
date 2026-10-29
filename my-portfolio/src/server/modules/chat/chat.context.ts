@@ -5,7 +5,7 @@ import { education } from "@/src/app/data/education";
 // Only public portfolio facts belong here. The prompt is not a secret store.
 const portfolio = {
   name: "Joshua Cubilla",
-  role: "Full-Stack Software Engineer",
+  role: "Full-Stack Developer",
   experience,
   education,
   stack,

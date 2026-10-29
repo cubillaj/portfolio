@@ -43,7 +43,7 @@ export const projects: Project[] = [
       { src: cloudinary("v1786708137/Screenshot_2026-08-14_194811_te8n60.png"), alt: "Singil invoices page" },
     ],
     liveUrl: "https://singil-sys.vercel.app/",
-    sourceLabel: "Source available on request",
+    sourceUrl: "https://github.com/cubillaj/singil-system",
     demoNote: "Scheduled recurring invoices are paused in the live demo.",
   },
   {
@@ -87,7 +87,7 @@ export const projects: Project[] = [
       { src: cloudinary("v1786708860/Screenshot_2026-08-14_200054_f0nfok.png"), alt: "Hearthside chat room" },
     ],
     liveUrl: "https://hearthsideroom.vercel.app/",
-    sourceLabel: "Source available on request",
+    sourceUrl: "https://github.com/cubillaj/HearthsideRooms",
   },
   {
     slug: "bjmp-reporting",

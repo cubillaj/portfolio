@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <main className={styles.wrap}>
       <header id="top" className={styles.hero}>
-        <p className={styles.eyebrow}>Full-Stack Software Engineer</p>
+        <p className={styles.eyebrow}>Full-Stack Developer</p>
         <h1>Hi, I&apos;m Joshua Cubilla.</h1>
         <p className={styles.lead}>I build web apps for real businesses and organizations, from invoicing tools to real-time reporting systems.</p>
         <div className={styles.actions}>

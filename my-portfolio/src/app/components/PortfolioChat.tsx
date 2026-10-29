@@ -147,6 +147,14 @@ export default function PortfolioChat() {
           onKeyDown={(event) => {
             if (event.key === "Escape") close();
           }}
+          onClick={(event) => {
+            const href = (event.target as HTMLElement)
+              .closest("a")
+              ?.getAttribute("href");
+            const isFullScreen =
+              window.matchMedia("(max-width: 640px)").matches;
+            if (href?.startsWith("/") && isFullScreen) close();
+          }}
         >
           <header className={styles.header}>
             <div className={styles.headerMain}>

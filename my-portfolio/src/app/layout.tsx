@@ -5,8 +5,8 @@ import PortfolioChat from "./components/PortfolioChat";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
-  title: "Joshua Cubilla | Full-Stack Software Engineer",
-  description: "Portfolio of Joshua Cubilla, a full-stack software engineer building secure APIs, real-time applications, multi-tenant platforms, and business software.",
+  title: "Joshua Cubilla | Full-Stack Developer",
+  description: "Portfolio of Joshua Cubilla, a full-stack developer building secure APIs, real-time applications, multi-tenant platforms, and business software.",
   icons: { icon: "/logo.svg" },
 };
 
