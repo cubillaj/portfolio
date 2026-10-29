@@ -67,7 +67,7 @@ export default function ContactForm({ compact = false }: { compact?: boolean }) 
       </>}
 
       <div className={styles.formSubmit}>
-        <button className={styles.cta} type="submit" disabled={status === "sending"}>
+        <button className={styles.button} type="submit" disabled={status === "sending"}>
           {status === "sending" ? "Sending..." : compact ? "Send" : "Send message"}
         </button>
         <p className={`${styles.formStatus} ${status === "success" ? styles.formSuccess : ""} ${status === "error" ? styles.formError : ""}`}

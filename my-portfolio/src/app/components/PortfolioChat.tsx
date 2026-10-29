@@ -238,7 +238,7 @@ export default function PortfolioChat() {
                     Try again
                   </button>
                 )}
-                <Link href="/contact">Contact Joshua</Link>
+                <Link href="/#contact">Contact Joshua</Link>
               </div>
             </div>
           )}
