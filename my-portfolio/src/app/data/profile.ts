@@ -5,6 +5,12 @@ export const stack = [
   "Socket.IO", "JWT & Session Auth", "AWS S3", "GitHub Actions", "BullMQ", "Zod", "Docker",
 ];
 
+export const skillGroups = [
+  { label: "Most used", items: ["TypeScript", "JavaScript", "React", "Node.js", "Express.js", "PostgreSQL", "REST APIs"] },
+  { label: "Experienced", items: ["Next.js", "MongoDB", "Redis", "Socket.IO", "JWT & Session Auth", "Prisma ORM", "Drizzle ORM", "Zod"] },
+  { label: "Familiar", items: ["Python", "Django REST Framework", "Tailwind CSS", "AWS S3", "GitHub Actions", "BullMQ", "Docker"] },
+];
+
 export const experience = [
   {
     role: "Project-Based Software Developer",

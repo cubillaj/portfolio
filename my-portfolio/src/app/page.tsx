@@ -1,23 +1,72 @@
-import Link from "next/link";
+import { Suspense } from "react";
+import ContactForm from "./components/ContactForm";
+import ProjectGrid from "./components/ProjectGrid";
+import { education } from "./data/education";
+import { experience, skillGroups } from "./data/profile";
+import { projects } from "./data/projects";
 import styles from "./page.module.css";
 
 export default function Home() {
   return (
     <main className={styles.wrap}>
-      <header className={styles.homeHero}>
-        <div className={styles.eyebrow}>Full-Stack Software Engineer</div>
-        <h1 className={styles.h1}>Joshua Cubilla</h1>
-        <p className={styles.heroLead}>I build secure, practical web products—from real-time collaboration tools to multi-tenant business platforms.</p>
-        <p className={styles.roleText}>My work combines thoughtful interfaces with dependable APIs, authentication, databases, and production-ready backend systems.</p>
-        <div className={styles.homeActions}>
-          <Link className={styles.cta} href="/projects">Explore my projects</Link>
-          <Link className={styles.textLink} href="/contact">Get in touch →</Link>
+      <header id="top" className={styles.hero}>
+        <p className={styles.eyebrow}>Full-Stack Software Engineer</p>
+        <h1>Hi, I&apos;m Joshua Cubilla.</h1>
+        <p className={styles.lead}>I build web apps for real businesses and organizations, from invoicing tools to real-time reporting systems.</p>
+        <div className={styles.actions}>
+          <a className={styles.button} href="#projects">View projects</a>
+          <a className={styles.buttonGhost} href="#contact">Contact me</a>
         </div>
       </header>
-      <section className={styles.homeGrid} aria-label="Portfolio overview">
-        <Link href="/projects"><span>01</span><h2>Selected projects</h2><p>See the problems I solved, the systems I designed, and the tools behind each build.</p></Link>
-        <Link href="/experience"><span>02</span><h2>Professional experience</h2><p>Learn how I contribute across planning, development, testing, and delivery.</p></Link>
-        <Link href="/skills"><span>03</span><h2>Technical toolkit</h2><p>Explore the languages, frameworks, databases, and infrastructure I work with.</p></Link>
+
+      <section id="projects" className={styles.section} aria-labelledby="projects-heading">
+        <h2 id="projects-heading" className={styles.sectionTitle}>Projects</h2>
+        <Suspense fallback={<p className={styles.muted}>Loading projects…</p>}>
+          <ProjectGrid projects={projects} />
+        </Suspense>
+      </section>
+
+      <section id="experience" className={styles.section} aria-labelledby="experience-heading">
+        <h2 id="experience-heading" className={styles.sectionTitle}>Experience</h2>
+        <div className={styles.list}>{experience.map((item) => <article key={item.role} className={styles.row}>
+          <p className={styles.rowLabel}>{item.context}</p>
+          <div>
+            <h3 className={styles.rowTitle}>{item.role}</h3>
+            <p className={styles.muted}>{item.company}</p>
+            <ul className={styles.bullets}>{item.points.map((point) => <li key={point}>{point}</li>)}</ul>
+          </div>
+        </article>)}</div>
+      </section>
+
+      <section id="skills" className={styles.section} aria-labelledby="skills-heading">
+        <h2 id="skills-heading" className={styles.sectionTitle}>Skills</h2>
+        <div className={styles.list}>{skillGroups.map((group) => <div key={group.label} className={styles.row}>
+          <h3 className={styles.rowLabel}>{group.label}</h3>
+          <ul className={styles.tags}>{group.items.map((item) => <li key={item}>{item}</li>)}</ul>
+        </div>)}</div>
+      </section>
+
+      <section id="education" className={styles.section} aria-labelledby="education-heading">
+        <h2 id="education-heading" className={styles.sectionTitle}>Education</h2>
+        <div className={styles.list}>
+          <article className={styles.row}>
+            <p className={styles.rowLabel}>{education.year}</p>
+            <div>
+              <h3 className={styles.rowTitle}>{education.degree}</h3>
+              <p className={styles.muted}>{education.institution} · {education.campus}</p>
+              <ul className={styles.tags}>{education.subjects.map((item) => <li key={item}>{item}</li>)}</ul>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="contact" className={`${styles.section} ${styles.contactSection}`} aria-labelledby="contact-heading">
+        <h2 id="contact-heading" className={styles.sectionTitle}>Contact</h2>
+        <p className={styles.contactIntro}>Open to remote and hybrid full-stack roles. I usually reply within 1–2 days.</p>
+        <ContactForm />
+        <p className={styles.contactLinks}>
+          Or find me on <a href="https://github.com/cubillaj" target="_blank" rel="noreferrer">GitHub ↗</a> and <a href="https://www.linkedin.com/in/joshua-cubilla-44829a364/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+        </p>
       </section>
     </main>
   );
