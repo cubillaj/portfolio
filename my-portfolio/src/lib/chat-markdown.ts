@@ -1,4 +1,5 @@
 import type { Link, Root, RootContent, Text } from "mdast";
+import { projects } from "@/src/app/data/projects";
 
 const PATH_LABELS: Record<string, string> = {
   "/projects": "Project",
@@ -26,7 +27,11 @@ export function internalChatHref(href?: string): string | undefined {
 }
 
 export function chatLinkLabel(href: string): string | undefined {
-  return PATH_LABELS[href.split(/[?#]/)[0]];
+  const url = new URL(href, "https://portfolio.local");
+  const slug = url.searchParams.get("project");
+  const project = projects.find((item) => item.slug === slug);
+  if (url.pathname === "/projects" && project) return project.title;
+  return PATH_LABELS[url.pathname];
 }
 
 // Work on parsed text nodes so existing Markdown links and code stay intact.

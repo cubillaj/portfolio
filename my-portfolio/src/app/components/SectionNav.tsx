@@ -15,6 +15,7 @@ const links = [
 export default function SectionNav() {
   const [open, setOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>();
 
   useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
@@ -33,6 +34,20 @@ export default function SectionNav() {
   }, []);
 
   useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) setActiveSection(entry.target.id);
+      }
+    }, { rootMargin: "-45% 0px -50% 0px" });
+
+    for (const id of ["top", ...links.map(({ href }) => href.slice(2))]) {
+      const section = document.getElementById(id);
+      if (section) observer.observe(section);
+    }
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
     document.documentElement.classList.toggle("dark", darkMode);
     window.localStorage.setItem("theme", darkMode ? "dark" : "light");
   }, [darkMode]);
@@ -44,7 +59,8 @@ export default function SectionNav() {
 
         <div id="portfolio-menu" className={`${styles.navLinks} ${open ? styles.navLinksOpen : ""}`}>
           {links.map(({ href, label }) => (
-            <Link key={href} href={href} onClick={() => setOpen(false)}>{label}</Link>
+            <Link key={href} href={href} aria-current={href === `/#${activeSection}` ? "location" : undefined}
+              onClick={() => setOpen(false)}>{label}</Link>
           ))}
         </div>
 

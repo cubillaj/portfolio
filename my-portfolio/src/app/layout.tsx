@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import { Geist } from "next/font/google";
 import "./globals.css";
 import SectionNav from "./components/SectionNav";
 import PortfolioChat from "./components/PortfolioChat";
 import styles from "./page.module.css";
+
+const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 
 export const metadata: Metadata = {
   title: "Joshua Cubilla | Full-Stack Developer",
@@ -12,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
+    <html lang="en" className={geist.variable} suppressHydrationWarning data-scroll-behavior="smooth">
       <body>
         <SectionNav />
         {children}
