@@ -49,8 +49,14 @@
   transition: color 0.15s ease;
 }
 
-.navLinks a:hover {
+.navLinks a:hover,
+.navLinks a[aria-current="location"] {
   color: var(--ink);
+}
+
+.navLinks a[aria-current="location"] {
+  text-decoration: underline 2px var(--stamp-blue);
+  text-underline-offset: 8px;
 }
 
 .navTools {
@@ -160,6 +166,27 @@
   scroll-margin-top: 20px;
 }
 
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero {
+    animation: fadeUp 0.6s ease-out both;
+  }
+
+  @supports (animation-timeline: view()) {
+    .section {
+      animation: fadeUp linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 25%;
+    }
+  }
+}
+
 .sectionTitle {
   margin: 0 0 24px;
   font-size: clamp(24px, 4vw, 30px);
@@ -188,11 +215,13 @@
   border-radius: 12px;
   background: var(--card);
   scroll-margin-top: 80px;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .card:hover {
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+  border-color: color-mix(in srgb, var(--ink) 18%, var(--line));
+  box-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.18);
+  transform: translateY(-3px);
 }
 
 .cardHighlighted {
@@ -200,12 +229,54 @@
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--stamp-blue) 20%, transparent);
 }
 
+.showcase {
+  padding: 16px 16px 0;
+  border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--stamp-blue) 12%, transparent), transparent 70%),
+    var(--paper-deep);
+}
+
+.browser {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+  background: var(--card);
+  box-shadow: 0 -4px 20px -8px rgba(0, 0, 0, 0.15);
+}
+
+.browserBar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 24px;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-deep);
+}
+
+.browserBar i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ink) 22%, transparent);
+}
+
+.browserBar span {
+  overflow: hidden;
+  margin-left: 8px;
+  color: var(--ink-soft);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .cardMedia {
   position: relative;
   overflow: hidden;
   aspect-ratio: 2 / 1;
-  border-bottom: 1px solid var(--line);
-  background: var(--paper-deep);
+  background: var(--card);
 }
 
 .cardMedia img {
@@ -213,6 +284,23 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+  transition: transform 0.4s ease;
+}
+
+.card:hover .cardMedia img {
+  transform: scale(1.03);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .cardMedia img {
+    transition: none;
+  }
+
+  .card:hover,
+  .card:hover .cardMedia img {
+    transform: none;
+  }
 }
 
 .mediaOpen {

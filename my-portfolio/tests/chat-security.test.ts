@@ -490,7 +490,7 @@ test("portfolio context includes BJMP facts for the chat model", () => {
   assert.match(CHAT_SYSTEM_PROMPT, /centralized reporting platform/);
 });
 
-test("project Markdown and bare paths render a Project link with the full police selector", () => {
+test("project Markdown and bare paths render a link named after the project", () => {
   const path = "/projects?project=police-incident-reporting";
   for (const content of [
     `You can view it at [${path}](${path}).`,
@@ -503,7 +503,7 @@ test("project Markdown and bare paths render a Project link with the full police
     );
     assert.match(
       html,
-      /href="\/projects\?project=police-incident-reporting"[^>]*>Project<\/a>/,
+      /href="\/projects\?project=police-incident-reporting"[^>]*>Police Incident Reporting and Documentation<\/a>/,
     );
     assert.equal((html.match(/<a\b/g) ?? []).length, 1);
     assert.doesNotMatch(html, /\[|\]\(/);

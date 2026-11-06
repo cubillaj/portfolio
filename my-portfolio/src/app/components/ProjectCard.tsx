@@ -17,6 +17,7 @@ export default function ProjectCard({ project, highlighted = false }: { project:
   const viewerRef = useRef<HTMLDialogElement>(null);
   const images = project.images ?? [];
   const image = images[imageIndex];
+  const host = project.liveUrl ? new URL(project.liveUrl).host : undefined;
   const step = (direction: -1 | 1) => setImageIndex((index) => (index + direction + images.length) % images.length);
 
   const closeOnBackdrop = (event: MouseEvent<HTMLDialogElement>) => {
@@ -31,22 +32,30 @@ export default function ProjectCard({ project, highlighted = false }: { project:
 
   return (
     <article id={project.slug} className={`${styles.card} ${highlighted ? styles.cardHighlighted : ""}`}>
-      <div className={styles.cardMedia}>
-        {image ? (
-          <button type="button" className={styles.mediaOpen} onClick={() => viewerRef.current?.showModal()} aria-label={`View ${image.alt} full size`}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={optimizeCloudinaryUrl(image.src, 1200)} alt={image.alt} loading="lazy" decoding="async" />
-          </button>
-        ) : (
-          <span className={styles.cardMediaEmpty}>{project.title}</span>
-        )}
-        {images.length > 1 && (
-          <div className={styles.mediaControls}>
-            <button type="button" onClick={() => step(-1)} aria-label="Previous screenshot">‹</button>
-            <span>{imageIndex + 1} / {images.length}</span>
-            <button type="button" onClick={() => step(1)} aria-label="Next screenshot">›</button>
+      <div className={styles.showcase}>
+        <div className={styles.browser}>
+          <div className={styles.browserBar} aria-hidden="true">
+            <i /><i /><i />
+            {host && <span>{host}</span>}
           </div>
-        )}
+          <div className={styles.cardMedia}>
+            {image ? (
+              <button type="button" className={styles.mediaOpen} onClick={() => viewerRef.current?.showModal()} aria-label={`View ${image.alt} full size`}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={optimizeCloudinaryUrl(image.src, 1200)} alt={image.alt} loading="lazy" decoding="async" />
+              </button>
+            ) : (
+              <span className={styles.cardMediaEmpty}>{project.title}</span>
+            )}
+            {images.length > 1 && (
+              <div className={styles.mediaControls}>
+                <button type="button" onClick={() => step(-1)} aria-label="Previous screenshot">‹</button>
+                <span>{imageIndex + 1} / {images.length}</span>
+                <button type="button" onClick={() => step(1)} aria-label="Next screenshot">›</button>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       <div className={styles.cardBody}>
